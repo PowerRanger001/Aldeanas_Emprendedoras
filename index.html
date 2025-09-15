@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aldeanas Emprenden | Plataforma de Servicios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f3f3;
+            color: #333;
+        }
+        .text-purple {
+            color: #6a0dad;
+        }
+        .bg-pink-light {
+            background-color: #f8cbf5;
+        }
+        .border-purple-strong {
+            border-color: #6a0dad;
+        }
+        .bg-purple-strong {
+            background-color: #6a0dad;
+        }
+        .hidden {
+            display: none;
+        }
+        .profile-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased leading-relaxed">
+
+    <!-- Hero Section -->
+    <header class="bg-pink-light py-20 px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-purple mb-4">Aldeanas Emprenden</h1>
+            <p class="text-xl md:text-2xl mb-8">
+                Aquí encontrarás señoritas de todo Lima. Sé respetuoso y cuidadoso.
+            </p>
+            <a href="#services" class="bg-purple-strong text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-purple-700 transition duration-300">
+                Explora Servicios
+            </a>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 px-4 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-purple mb-12">Nuestros Servicios</h2>
+            <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <p id="loading-services" class="text-center col-span-full text-gray-500">Cargando servicios...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section (Contact) -->
+    <section id="contact" class="bg-pink-light py-20 px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-purple mb-6">Publica tu servicio</h2>
+            <p class="text-xl md:text-2xl mb-8">
+                Únete a nuestra comunidad y ofrece tus servicios.
+            </p>
+            <div class="p-6 bg-yellow-100 rounded-xl border border-yellow-300 shadow-md mb-8">
+                <h4 class="font-bold text-yellow-800 text-lg mb-2">Advertencia de Seguridad</h4>
+                <p class="text-yellow-700">Este sitio web actúa únicamente como una plataforma de conexión entre usuarios. No nos hacemos responsables de las interacciones, transacciones o acuerdos que se realicen fuera de esta página. Por favor, actúa con cautela y discreción.</p>
+            </div>
+            <button id="add-service-btn" class="bg-purple-strong text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-purple-700 transition duration-300">
+                Añadir tu servicio
+            </button>
+        </div>
+    </section>
+
+    <!-- New Service Form Section -->
+    <section id="new-service-form-section" class="py-20 px-4 hidden">
+        <div class="container mx-auto max-w-xl bg-white p-8 rounded-xl shadow-lg">
+            <h3 class="text-2xl font-bold text-purple mb-6">Añadir Nuevo Servicio</h3>
+            <p class="text-sm text-gray-500 mb-4">ID de Usuario: <span id="user-id-display">Cargando...</span></p>
+            <form id="new-service-form" class="space-y-4">
+                <div class="p-4 bg-red-100 rounded-lg text-red-600 font-semibold border border-red-200">
+                    ⚠️ Solo para mayores de 18 años. Por favor, selecciona tu edad para continuar.
+                </div>
+                <div class="p-4 bg-purple-100 rounded-lg text-purple-600 font-semibold border border-purple-200">
+                    ♀️ Esta página es exclusiva para la creación de perfiles por mujeres.
+                </div>
+                <div>
+                    <label for="profile-name" class="block text-gray-700 font-semibold mb-2">Nombre o Apodo</label>
+                    <p class="text-sm text-gray-500 mb-2">
+                        💡 Por tu seguridad, te recomendamos usar un apodo.
+                    </p>
+                    <input type="text" id="profile-name" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ej. Ana o NocheEstrellada" required>
+                </div>
+                <div>
+                    <label for="profile-age" class="block text-gray-700 font-semibold mb-2">Tu edad</label>
+                    <select id="profile-age" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                        <option value="" disabled selected>Selecciona tu edad</option>
+                        <!-- Options will be generated by JavaScript -->
+                    </select>
+                </div>
+                <div>
+                    <label for="profile-whatsapp" class="block text-gray-700 font-semibold mb-2">Tu número de WhatsApp</label>
+                    <input type="tel" id="profile-whatsapp" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Ej. 987654321" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Selecciona uno o más servicios</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="service-option" value="Salida de una noche" class="mr-2">
+                            Salida de una noche
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="service-option" value="Cita online" class="mr-2">
+                            Cita online
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="service-option" value="Cita con Beneficios" class="mr-2">
+                            Cita con Beneficios
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="service-option" value="Masajes" class="mr-2">
+                            Masajes
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="service-option" value="Alquiler de novia" class="mr-2">
+                            Alquiler de novia
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Selecciona una o más zonas</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="location-option" value="Lima Norte" class="mr-2">
+                            Lima Norte
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="location-option" value="Lima Centro" class="mr-2">
+                            Lima Centro
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="location-option" value="Lima Sur" class="mr-2">
+                            Lima Sur
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="location-option" value="Callao" class="mr-2">
+                            Callao
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Rango de Precios</label>
+                    <div class="flex space-x-4">
+                        <div class="w-1/2">
+                            <label for="price-min" class="block text-sm text-gray-500 mb-1">Mínimo (S/)</label>
+                            <select id="price-min" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                                <option value="" disabled selected>Mín.</option>
+                            </select>
+                        </div>
+                        <div class="w-1/2">
+                            <label for="price-max" class="block text-sm text-gray-500 mb-1">Máximo (S/)</label>
+                            <select id="price-max" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+                                <option value="" disabled selected>Máx.</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="service-description" class="block text-gray-700 font-semibold mb-2">Descripción</label>
+                    <textarea id="service-description" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" rows="4" placeholder="Describe brevemente lo que ofreces..." required></textarea>
+                </div>
+                <div>
+                    <label for="service-image-1" class="block text-gray-700 font-semibold mb-2">Código Data URI de la Imagen 1 (opcional)</label>
+                    <p class="text-sm text-gray-500 mb-2">
+                        💡 Por seguridad, usa un conversor como el de <a href="https://www.site24x7.com/es/tools/imagen-a-datos-uri.html" target="_blank" class="text-purple-strong underline">SITE24X7</a> para convertir tu imagen y pega el código aquí.
+                    </p>
+                    <input type="url" id="service-image-1" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="data:image/jpeg;base64,...">
+                </div>
+                <div>
+                    <label for="service-image-2" class="block text-gray-700 font-semibold mb-2">Código Data URI de la Imagen 2 (opcional)</label>
+                    <p class="text-sm text-gray-500 mb-2">
+                        💡 Sube tu foto al mismo servicio y pega el código aquí.
+                    </p>
+                    <input type="url" id="service-image-2" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="data:image/jpeg;base64,...">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="bg-purple-strong text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-purple-700 transition duration-300">
+                        Publicar Perfil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Modal for Profile Details -->
+    <div id="profile-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white p-8 rounded-xl shadow-xl max-w-2xl w-full mx-auto relative">
+            <button onclick="closeProfileDetails()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+            </button>
+            <div id="profile-details-content" class="text-center">
+                <!-- Profile details will be loaded here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 px-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Aldeanas Emprenden. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Message Box (Instead of alert()) -->
+    <div id="message-box" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
+            <p id="message-text" class="text-center text-lg mb-4"></p>
+            <button onclick="hideMessage()" class="w-full bg-purple-strong text-white font-semibold py-2 rounded-full hover:bg-purple-700 transition duration-300">Cerrar</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // IMPORTANT: Replace this placeholder with your actual WhatsApp phone number.
+        const MY_WHATSAPP_NUMBER = "980998296";
+
+        let db;
+        let auth;
+        let userId;
+        let servicesData = {}; // Store services by docId for quick access
+
+        const servicesGrid = document.getElementById('services-grid');
+        const newServiceFormSection = document.getElementById('new-service-form-section');
+        const addServiceBtn = document.getElementById('add-service-btn');
+        const newServiceForm = document.getElementById('new-service-form');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const loadingServices = document.getElementById('loading-services');
+        const profileModal = document.getElementById('profile-modal');
+        const profileDetailsContent = document.getElementById('profile-details-content');
+        const profileAgeSelect = document.getElementById('profile-age');
+        const priceMinSelect = document.getElementById('price-min');
+        const priceMaxSelect = document.getElementById('price-max');
+
+        // Functions for the custom message box
+        const messageBox = document.getElementById('message-box');
+        const messageText = document.getElementById('message-text');
+
+        function showMessage(text) {
+            messageText.textContent = text;
+            messageBox.classList.remove('hidden');
+        }
+
+        function hideMessage() {
+            messageBox.classList.add('hidden');
+        }
+
+        // Delete a service from the database
+        async function deleteService(docId) {
+            if (confirm("¿Estás segura de que quieres eliminar este perfil?")) {
+                try {
+                    await deleteDoc(doc(db, `artifacts/${appId}/public/data/services`, docId));
+                    showMessage("Perfil eliminado correctamente.");
+                } catch (error) {
+                    console.error("Error al eliminar el documento:", error);
+                    showMessage("Hubo un error al eliminar el perfil. Por favor, inténtalo de nuevo.");
+                }
+            }
+        }
+        window.deleteService = deleteService;
+
+        // Initialize Firebase and Auth
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    userIdDisplay.textContent = userId;
+                    addServiceBtn.onclick = () => {
+                        newServiceFormSection.classList.remove('hidden');
+                        document.getElementById('profile-name').focus();
+                    };
+                } else {
+                    userId = null;
+                    userIdDisplay.textContent = 'No autenticado';
+                }
+            });
+
+            // Sign in with the provided token or anonymously
+            if (initialAuthToken) {
+                await signInWithCustomToken(auth, initialAuthToken);
+            } else {
+                await signInAnonymously(auth);
+            }
+            
+            // Populate the age dropdown
+            for (let i = 18; i <= 48; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                profileAgeSelect.appendChild(option);
+            }
+
+            // Populate the price range dropdowns
+            for (let i = 80; i <= 350; i += 10) {
+                const optionMin = document.createElement('option');
+                optionMin.value = i;
+                optionMin.textContent = `S/ ${i}`;
+                priceMinSelect.appendChild(optionMin);
+
+                const optionMax = document.createElement('option');
+                optionMax.value = i;
+                optionMax.textContent = `S/ ${i}`;
+                priceMaxSelect.appendChild(optionMax);
+            }
+
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+            showMessage("Hubo un error al conectar con la base de datos. Intenta más tarde.");
+        }
+
+        // Show a detailed profile in a modal
+        function showProfileDetails(docId) {
+            const service = servicesData[docId];
+            if (!service) {
+                showMessage("No se encontró el perfil.");
+                return;
+            }
+
+            const imagesHtml = service.images.map(imgSrc => `<img src="${imgSrc}" alt="Imagen del servicio de ${service.profileName}" class="w-full object-cover rounded-md shadow-sm" onerror="this.onerror=null;this.src='https://placehold.co/400x300/d1d5db/374151?text=Sin+Imagen';">`).join('');
+            const locationsHtml = service.location ? `<p class="text-gray-600 mb-2 font-semibold">Ubicación: ${service.location.join(' • ')}</p>` : '';
+            const priceHtml = service.priceRange ? `<p class="text-gray-600 mb-2 font-semibold">Precios: S/ ${service.priceRange.min} - S/ ${service.priceRange.max}</p>` : '';
+
+            profileDetailsContent.innerHTML = `
+                <h3 class="text-3xl font-bold text-purple mb-4">${service.profileName}</h3>
+                <p class="text-gray-600 mb-2 text-center"><span class="font-bold">Edad:</span> ${service.age}</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    ${imagesHtml}
+                </div>
+                ${locationsHtml}
+                ${priceHtml}
+                <p class="text-gray-600 mb-4 text-left"><span class="font-bold">Servicios:</span> ${service.services.join(' • ')}</p>
+                <p class="text-gray-800 text-left">${service.description}</p>
+                <button onclick="openWhatsApp('${docId}', '${service.profileName}')" class="mt-8 bg-purple-strong text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-purple-700 transition duration-300">
+                    Solicitar información por WhatsApp
+                </button>
+            `;
+            profileModal.classList.remove('hidden');
+        }
+
+        // Close the profile modal
+        function closeProfileDetails() {
+            profileModal.classList.add('hidden');
+        }
+
+        // Open WhatsApp with a pre-filled message
+        function openWhatsApp(serviceCode, profileName) {
+            const message = encodeURIComponent(`Hola, estoy interesada/o en el servicio de ${profileName} (código ${serviceCode}) que vi en Aldeanas Emprenden. ¿Podrías darme más información?`);
+            const url = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${message}`;
+            window.open(url, '_blank');
+        }
+
+        // Handle service creation form submission to save to database and send WhatsApp message
+        newServiceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Generar código único para el perfil
+            const profileCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+            const profileName = document.getElementById('profile-name').value;
+            const profileAge = document.getElementById('profile-age').value;
+            const profileWhatsapp = document.getElementById('profile-whatsapp').value;
+            const selectedServices = Array.from(document.querySelectorAll('input[name="service-option"]:checked')).map(el => el.value);
+            const selectedLocations = Array.from(document.querySelectorAll('input[name="location-option"]:checked')).map(el => el.value);
+            const priceMin = priceMinSelect.value;
+            const priceMax = priceMaxSelect.value;
+            const description = document.getElementById('service-description').value;
+            const image1 = document.getElementById('service-image-1').value;
+            const image2 = document.getElementById('service-image-2').value;
+            
+            if (selectedServices.length === 0) {
+                showMessage("Por favor, selecciona al menos un servicio.");
+                return;
+            }
+
+            if (selectedLocations.length === 0) {
+                showMessage("Por favor, selecciona al menos una zona de ubicación.");
+                return;
+            }
+
+            if (parseInt(priceMin) > parseInt(priceMax)) {
+                showMessage("El precio mínimo no puede ser mayor que el precio máximo.");
+                return;
+            }
+
+            try {
+                // Save the new profile to Firestore
+                await addDoc(collection(db, `artifacts/${appId}/public/data/services`), {
+                    code: profileCode,
+                    profileName: profileName,
+                    age: profileAge,
+                    whatsapp: profileWhatsapp,
+                    services: selectedServices,
+                    location: selectedLocations,
+                    priceRange: { min: priceMin, max: priceMax },
+                    description: description,
+                    images: [image1, image2].filter(img => img),
+                    creatorId: userId,
+                    createdAt: new Date()
+                });
+
+                // Build the WhatsApp message for the owner
+                const whatsappMessage = `*Nueva solicitud de perfil (${profileCode}):*\n\n` +
+                                        `*Nombre/Apodo:* ${profileName}\n` +
+                                        `*Edad:* ${profileAge}\n` +
+                                        `*Número de WhatsApp:* ${profileWhatsapp}\n` +
+                                        `*Servicios:* ${selectedServices.join(', ')}\n` +
+                                        `*Ubicación:* ${selectedLocations.join(', ')}\n` +
+                                        `*Rango de Precios:* S/ ${priceMin} - S/ ${priceMax}\n` +
+                                        `*Descripción:* ${description}\n\n` +
+                                        `*Imágenes (Data URIs):*\n` +
+                                        `- Imagen 1: ${image1 || 'N/A'}\n` +
+                                        `- Imagen 2: ${image2 || 'N/A'}`;
+
+                const url = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+                
+                window.open(url, '_blank');
+                showMessage("¡Perfil creado! Tu perfil ya está visible en la página. Te hemos enviado un mensaje de WhatsApp con los detalles para tu verificación.");
+
+                // Reset form fields
+                newServiceForm.reset();
+
+            } catch (error) {
+                console.error("Error creating profile:", error);
+                showMessage("Hubo un error al crear el perfil. Por favor, inténtalo de nuevo.");
+            }
+        });
+
+        // Listen for real-time updates on services collection
+        if (db) {
+            const servicesRef = collection(db, `artifacts/${appId}/public/data/services`);
+            const q = query(servicesRef);
+            onSnapshot(q, (snapshot) => {
+                loadingServices.classList.add('hidden');
+                servicesGrid.innerHTML = ''; // Clear the grid
+                servicesData = {}; // Reset cached data
+
+                if (snapshot.empty) {
+                    servicesGrid.innerHTML = '<p class="text-center col-span-full text-gray-500">Aún no hay servicios disponibles.</p>';
+                } else {
+                    snapshot.forEach(doc => {
+                        const service = doc.data();
+                        servicesData[doc.id] = service; // Cache the data
+
+                        const card = document.createElement('div');
+                        card.className = "bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2 relative profile-card";
+                        card.onclick = () => showProfileDetails(doc.id);
+
+                        const isOwner = userId && service.creatorId === userId;
+                        const deleteBtnHtml = isOwner ? 
+                            `<button onclick="event.stopPropagation(); deleteService('${doc.id}');" class="absolute top-2 right-2 p-1 text-red-500 hover:text-red-700 transition duration-300" title="Eliminar servicio">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" />
+                                </svg>
+                            </button>` : '';
+
+                        const serviceNames = service.services.join(' • ');
+                        const locationsHtml = service.location ? `<p class="text-gray-600 font-semibold mb-2">Ubicación: ${service.location.join(' • ')}</p>` : '';
+                        const priceHtml = service.priceRange ? `<p class="text-gray-600 font-semibold mb-2">Precios: S/ ${service.priceRange.min} - S/ ${service.priceRange.max}</p>` : '';
+
+                        card.innerHTML = `
+                            <div class="relative">
+                                ${service.images.map(imgSrc => `<img src="${imgSrc}" alt="Imagen del servicio de ${service.profileName}" class="w-full h-48 object-cover rounded-md mb-2 shadow-sm" onerror="this.onerror=null;this.src='https://placehold.co/400x300/d1d5db/374151?text=Sin+Imagen';">`).join('')}
+                                ${deleteBtnHtml}
+                            </div>
+                            <h3 class="text-xl font-bold text-purple mb-2">${service.profileName}</h3>
+                            <p class="text-gray-600 mb-2 font-semibold">Edad: ${service.age}</p>
+                            ${locationsHtml}
+                            ${priceHtml}
+                            <p class="text-gray-600 mb-2 font-semibold">${serviceNames}</p>
+                            <p class="text-gray-600 mb-4">${service.description}</p>
+                        `;
+                        servicesGrid.appendChild(card);
+                    });
+                }
+            }, (error) => {
+                console.error("Error listening to services:", error);
+                loadingServices.classList.add('hidden');
+                servicesGrid.innerHTML = '<p class="text-center col-span-full text-red-500">Error al cargar los servicios. Por favor, revisa la consola.</p>';
+            });
+        }
+        
+        // Expose functions to the global scope for onclick events
+        window.showProfileDetails = showProfileDetails;
+        window.closeProfileDetails = closeProfileDetails;
+        window.openWhatsApp = openWhatsApp;
+        window.showMessage = showMessage;
+        window.hideMessage = hideMessage;
+    </script>
+</body>
+</html>
