@@ -346,6 +346,22 @@
             showMessage("Hubo un error al conectar con la base de datos. Intenta más tarde.");
         }
 
+        // Function to copy a number to the clipboard
+        function copyWhatsAppNumber(phoneNumber) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = phoneNumber;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999); // For mobile devices
+            try {
+                document.execCommand('copy');
+                showMessage("Número copiado al portapapeles.");
+            } catch (err) {
+                showMessage("No se pudo copiar el número. Por favor, cópialo manualmente.");
+            }
+            document.body.removeChild(tempInput);
+        }
+
         // Show a detailed profile in a modal
         function showProfileDetails(docId) {
             const service = servicesData[docId];
@@ -368,9 +384,13 @@
                 ${priceHtml}
                 <p class="text-gray-600 mb-4 text-left"><span class="font-bold">Servicios:</span> ${service.services.join(' • ')}</p>
                 <p class="text-gray-800 text-left">${service.description}</p>
-                <button onclick="openWhatsApp('${docId}', '${service.profileName}')" class="mt-8 bg-purple-strong text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-purple-700 transition duration-300">
-                    Solicitar información por WhatsApp
-                </button>
+                <div class="mt-8 flex flex-col items-center">
+                    <p class="text-xl font-bold mb-2">Número de WhatsApp:</p>
+                    <p id="whatsapp-to-copy" class="text-2xl text-purple font-extrabold mb-4">${service.whatsapp}</p>
+                    <button onclick="copyWhatsAppNumber('${service.whatsapp}')" class="bg-purple-strong text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-purple-700 transition duration-300">
+                        Copiar número
+                    </button>
+                </div>
             `;
             profileModal.classList.remove('hidden');
         }
@@ -380,7 +400,7 @@
             profileModal.classList.add('hidden');
         }
 
-        // Open WhatsApp with a pre-filled message
+        // Open WhatsApp with a pre-filled message (only for the form submission to the owner)
         function openWhatsApp(serviceCode, profileName) {
             const message = encodeURIComponent(`Hola, estoy interesada/o en el servicio de ${profileName} (código ${serviceCode}) que vi en Aldeanas Emprenden. ¿Podrías darme más información?`);
             const url = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${message}`;
@@ -520,7 +540,8 @@
         // Expose functions to the global scope for onclick events
         window.showProfileDetails = showProfileDetails;
         window.closeProfileDetails = closeProfileDetails;
-        window.openWhatsApp = openWhatsApp;
+        window.copyWhatsAppNumber = copyWhatsAppNumber;
+        window.openWhatsApp = openWhatsApp; // Still needed for form submission
         window.showMessage = showMessage;
         window.hideMessage = hideMessage;
     </script>
