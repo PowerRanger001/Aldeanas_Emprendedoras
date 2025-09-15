@@ -240,9 +240,6 @@
         const firebaseConfigString = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
-        // IMPORTANT: Replace this placeholder with your actual WhatsApp phone number.
-        const MY_WHATSAPP_NUMBER = "980998296";
-
         let db;
         let auth;
         let userId;
@@ -400,14 +397,7 @@
             profileModal.classList.add('hidden');
         }
 
-        // Open WhatsApp with a pre-filled message (only for the form submission to the owner)
-        function openWhatsApp(serviceCode, profileName) {
-            const message = encodeURIComponent(`Hola, estoy interesada/o en el servicio de ${profileName} (código ${serviceCode}) que vi en Aldeanas Emprenden. ¿Podrías darme más información?`);
-            const url = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${message}`;
-            window.open(url, '_blank');
-        }
-
-        // Handle service creation form submission to save to database and send WhatsApp message
+        // Handle service creation form submission to save to database
         newServiceForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -456,23 +446,7 @@
                     createdAt: new Date()
                 });
 
-                // Build the WhatsApp message for the owner
-                const whatsappMessage = `*Nueva solicitud de perfil (${profileCode}):*\n\n` +
-                                        `*Nombre/Apodo:* ${profileName}\n` +
-                                        `*Edad:* ${profileAge}\n` +
-                                        `*Número de WhatsApp:* ${profileWhatsapp}\n` +
-                                        `*Servicios:* ${selectedServices.join(', ')}\n` +
-                                        `*Ubicación:* ${selectedLocations.join(', ')}\n` +
-                                        `*Rango de Precios:* S/ ${priceMin} - S/ ${priceMax}\n` +
-                                        `*Descripción:* ${description}\n\n` +
-                                        `*Imágenes (Data URIs):*\n` +
-                                        `- Imagen 1: ${image1 || 'N/A'}\n` +
-                                        `- Imagen 2: ${image2 || 'N/A'}`;
-
-                const url = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
-                
-                window.open(url, '_blank');
-                showMessage("¡Perfil creado! Tu perfil ya está visible en la página. Te hemos enviado un mensaje de WhatsApp con los detalles para tu verificación.");
+                showMessage("¡Perfil creado! Tu perfil ya está visible en la página.");
 
                 // Reset form fields
                 newServiceForm.reset();
@@ -541,7 +515,6 @@
         window.showProfileDetails = showProfileDetails;
         window.closeProfileDetails = closeProfileDetails;
         window.copyWhatsAppNumber = copyWhatsAppNumber;
-        window.openWhatsApp = openWhatsApp; // Still needed for form submission
         window.showMessage = showMessage;
         window.hideMessage = hideMessage;
     </script>
