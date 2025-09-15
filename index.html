@@ -237,7 +237,7 @@
 
         // Global variables provided by the environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const firebaseConfigString = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         
         // IMPORTANT: Replace this placeholder with your actual WhatsApp phone number.
@@ -289,29 +289,35 @@
 
         // Initialize Firebase and Auth
         try {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    userIdDisplay.textContent = userId;
-                    addServiceBtn.onclick = () => {
-                        newServiceFormSection.classList.remove('hidden');
-                        document.getElementById('profile-name').focus();
-                    };
-                } else {
-                    userId = null;
-                    userIdDisplay.textContent = 'No autenticado';
-                }
-            });
-
-            // Sign in with the provided token or anonymously
-            if (initialAuthToken) {
-                await signInWithCustomToken(auth, initialAuthToken);
+            const firebaseConfig = JSON.parse(firebaseConfigString);
+            if (Object.keys(firebaseConfig).length === 0) {
+                console.error("Firebase config is empty. The app cannot connect to the database.");
+                showMessage("La configuración de la base de datos no está disponible. No se pueden cargar los servicios.");
             } else {
-                await signInAnonymously(auth);
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+            
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        userIdDisplay.textContent = userId;
+                        addServiceBtn.onclick = () => {
+                            newServiceFormSection.classList.remove('hidden');
+                            document.getElementById('profile-name').focus();
+                        };
+                    } else {
+                        userId = null;
+                        userIdDisplay.textContent = 'No autenticado';
+                    }
+                });
+
+                // Sign in with the provided token or anonymously
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
             }
             
             // Populate the age dropdown
